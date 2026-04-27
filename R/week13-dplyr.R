@@ -14,16 +14,18 @@ con <- dbConnect( # I'm considering connecting to the db Resources, but if thats
   sslmode = "require")
 
 # Data Import and Cleaning
-employees_tbl <- dbGetQuery(con, "SELECT * FROM datascience_employees")
-testscores_tbl <- dbGetQuery(con, "SELECT * FROM datascience_testscores")
-offices_tbl <- dbGetQuery(con, "SELECT * FROM datascience_offices")
+employees_tbl <- dbGetQuery(con, "SELECT * FROM datascience_employees") # selected all(*) from specified table in db
+testscores_tbl <- dbGetQuery(con, "SELECT * FROM datascience_testscores")  # selected all(*) from specified table in db
+offices_tbl <- dbGetQuery(con, "SELECT * FROM datascience_offices")  # selected all(*) from specified table in db
 
-write.csv(employees_tbl, "../data/employees.csv", row.names = FALSE)
-write.csv(testscores_tbl, "../data/testscores.csv", row.names = FALSE)
-write.csv(offices_tbl, "../data/offices.csv", row.names = FALSE)
+write.csv(employees_tbl, "../data/employees.csv", row.names = FALSE) # Save csv to data file
+write.csv(testscores_tbl, "../data/testscores.csv", row.names = FALSE) # Save csv to data file
+write.csv(offices_tbl, "../data/offices.csv", row.names = FALSE) # Save csv to data file
 
+week13_tbl <- employees_tbl %>%
+  inner_join(testscores_tbl, by = "employee_id") %>%
+  inner_join(offices_tbl, by = c("city" = "office"))
 
-
-
+write.csv(week13_tbl, "../out/week13.csv", row.names = FALSE)
 
 
